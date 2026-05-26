@@ -2,8 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const ASSET_PATHS = {
-  introVideo: '/TimelessY2KVideo.mp4',
-  wallpaper: '/TimelessY2KWallpaper.JPG',
+  introVideo: '/video/TimelessY2Kvideo.mp4',
+  wallpaper: '/TimelessY2KWallpaper.jpg',
   icons: '/icons/',
 };
 
@@ -28,6 +28,7 @@ const desktopIcons = [
     id: 'phone-open',
     label: 'RSVP.txt',
     file: 'nokiaOpenICON.PNG',
+    fallbackFile: 'nokiaClosedICON.PNG',
     x: 37,
     y: 10,
     action: 'text',
@@ -348,8 +349,13 @@ function BootGate({ onStart }) {
 }
 
 function DesktopIcon({ icon, onAction, onMove }) {
+  const [source, setSource] = useState(`${ASSET_PATHS.icons}${icon.file}`);
   const startRef = useRef(null);
   const dragRef = useRef(null);
+
+  useEffect(() => {
+    setSource(`${ASSET_PATHS.icons}${icon.file}`);
+  }, [icon.file]);
 
   const onPointerDown = (event) => {
     dragRef.current = event.currentTarget;
@@ -391,7 +397,14 @@ function DesktopIcon({ icon, onAction, onMove }) {
       animate={icon.action === 'shake' ? { x: [0, -2, 2, -1, 1, 0] } : {}}
       transition={{ repeat: icon.action === 'shake' ? Infinity : 0, repeatDelay: 4 }}
     >
-      <img src={`${ASSET_PATHS.icons}${icon.file}`} alt="" draggable="false" />
+      <img
+        src={source}
+        alt=""
+        draggable="false"
+        onError={() => {
+          if (icon.fallbackFile) setSource(`${ASSET_PATHS.icons}${icon.fallbackFile}`);
+        }}
+      />
       <span>{icon.label}</span>
     </motion.button>
   );
