@@ -1,0 +1,387 @@
+@font-face {
+  font-family: 'PixelFallback';
+  src: local('Courier New');
+}
+
+:root {
+  --win-gray: #c0c0c0;
+  --win-dark: #111;
+  --win-blue: #000080;
+  --hot-pink: #ff3fb7;
+  --acid-green: #c9ff3d;
+  --chrome: #e7e7e7;
+  --gold: #f5c84c;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { min-height: 100%; margin: 0; }
+body {
+  overflow: hidden;
+  background: #050505;
+  color: white;
+  font-family: 'PixelFallback', 'MS Sans Serif', monospace;
+}
+button { font: inherit; }
+
+.intro-video-screen,
+.boot-gate,
+.site-shell {
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+  position: relative;
+}
+
+.intro-video-screen {
+  background: #000;
+  display: grid;
+  place-items: center;
+}
+
+.intro-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.skip-link,
+.intro-skip {
+  position: fixed;
+  z-index: 5;
+  border: 2px solid white;
+  background: rgba(0, 0, 0, 0.65);
+  color: white;
+  padding: 0.65rem 1rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.skip-link { right: 1rem; bottom: 1rem; }
+.intro-skip { inset: auto auto 45% auto; }
+
+.boot-gate {
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at center, rgba(0, 103, 255, 0.22), transparent 28%),
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.06) 0 1px, transparent 1px 4px),
+    #02020a;
+}
+
+.boot-gate::before {
+  content: '';
+  position: absolute;
+  inset: -40%;
+  background: conic-gradient(from 0deg, transparent, rgba(255, 63, 183, 0.18), transparent, rgba(201, 255, 61, 0.18), transparent);
+  animation: timeTunnel 3.5s linear infinite;
+}
+
+.title-wrap {
+  position: relative;
+  width: min(92vw, 900px);
+  padding: 2rem;
+  text-align: center;
+  z-index: 1;
+  text-shadow: 3px 3px 0 #000;
+}
+
+.small-title {
+  color: var(--acid-green);
+  letter-spacing: 0.18em;
+  font-size: clamp(0.8rem, 2vw, 1.1rem);
+}
+
+.overly-title,
+.year-title {
+  margin: 0;
+  line-height: 0.92;
+  text-transform: uppercase;
+  font-weight: 900;
+}
+
+.overly-title {
+  font-size: clamp(4rem, 16vw, 11rem);
+  color: var(--hot-pink);
+  -webkit-text-stroke: 3px #111;
+  filter: drop-shadow(0 0 14px rgba(255, 63, 183, 0.8));
+  animation: glitch 0.85s infinite steps(2, end);
+}
+
+.year-title {
+  font-size: clamp(3.5rem, 15vw, 10rem);
+  background: linear-gradient(90deg, var(--acid-green), white, #59d6ff);
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-stroke: 2px #111;
+  animation: warpText 1.6s ease-in-out infinite;
+}
+
+.enter-btn {
+  margin-top: 1.2rem;
+  border: 3px outset #fff;
+  background: var(--win-gray);
+  color: #000;
+  padding: 0.8rem 1.4rem;
+  cursor: pointer;
+  box-shadow: 7px 7px 0 rgba(0,0,0,0.55);
+}
+
+.site-shell {
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at top, rgba(255, 63, 183, 0.2), transparent 36%),
+    linear-gradient(135deg, #000, #0c1020 60%, #000);
+}
+
+.desktop-frame {
+  width: min(100vw, calc(100dvh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  position: relative;
+  overflow: hidden;
+  background: #000;
+  border-radius: 0.75rem;
+  box-shadow: 0 0 80px rgba(0, 0, 0, 0.8);
+}
+
+.desktop-screen {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+.wallpaper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(1.12) contrast(1.05);
+  user-select: none;
+  pointer-events: none;
+}
+
+.desktop-layer {
+  position: absolute;
+  inset: 0 0 34px 0;
+  z-index: 2;
+}
+
+.crt-overlay {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background:
+    radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.3) 100%),
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.08) 0 1px, transparent 1px 4px);
+  mix-blend-mode: overlay;
+}
+
+.desktop-icon {
+  position: absolute;
+  width: clamp(62px, 8vw, 104px);
+  transform: translate(-50%, -50%);
+  border: 1px solid transparent;
+  background: transparent;
+  color: white;
+  text-shadow: 2px 2px 0 #000, -1px -1px 0 #000;
+  cursor: grab;
+  padding: 0.2rem;
+  touch-action: none;
+}
+
+.desktop-icon:hover,
+.desktop-icon:focus-visible {
+  border: 1px dotted white;
+  background: rgba(0, 0, 128, 0.3);
+  outline: none;
+}
+
+.desktop-icon img {
+  width: clamp(38px, 5.5vw, 72px);
+  height: clamp(38px, 5.5vw, 72px);
+  object-fit: contain;
+  image-rendering: pixelated;
+  display: block;
+  margin: 0 auto 0.2rem;
+  filter: drop-shadow(2px 4px 0 rgba(0,0,0,0.7));
+}
+
+.desktop-icon span {
+  display: block;
+  font-size: clamp(0.58rem, 1.2vw, 0.85rem);
+  line-height: 1.05;
+  word-break: break-word;
+}
+
+.desktop-icon.jump img { animation: pulseStar 1.1s ease-in-out infinite; }
+.desktop-icon.pop img { animation: lollipopSpin 2.2s linear infinite; }
+.desktop-icon.shine img { animation: shineIcon 1.8s ease-in-out infinite; }
+.desktop-icon.links img { animation: swing 1.8s ease-in-out infinite; transform-origin: 50% 0; }
+
+.window-popup {
+  position: absolute;
+  z-index: 5;
+  width: min(360px, 82vw);
+  min-height: 160px;
+  background: var(--win-gray);
+  border: 3px outset #fff;
+  color: #000;
+  box-shadow: 8px 8px 0 rgba(0,0,0,0.58);
+}
+
+.window-titlebar {
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(90deg, #000080, #1084d0);
+  color: white;
+  padding-left: 0.45rem;
+  font-weight: 700;
+  cursor: grab;
+}
+
+.window-controls {
+  display: flex;
+  gap: 2px;
+  padding-right: 3px;
+}
+
+.window-controls button,
+.window-buttons button,
+.start-button,
+.task-button {
+  border: 2px outset #fff;
+  background: var(--win-gray);
+  color: #000;
+  min-height: 23px;
+  cursor: pointer;
+}
+
+.window-controls button {
+  width: 23px;
+  height: 21px;
+  line-height: 1;
+}
+
+.window-body {
+  padding: 1rem;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.5), transparent),
+    var(--win-gray);
+}
+
+.window-body h2 {
+  margin: 0 0 0.6rem;
+  font-size: 1.25rem;
+  text-transform: uppercase;
+}
+
+.window-body p {
+  margin: 0 0 1rem;
+  line-height: 1.35;
+}
+
+.window-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.kiss-stamp {
+  position: absolute;
+  z-index: 4;
+  font-size: clamp(2rem, 7vw, 5rem);
+  pointer-events: none;
+  filter: drop-shadow(4px 4px 0 #000);
+}
+
+.taskbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 34px;
+  z-index: 8;
+  background: var(--win-gray);
+  border-top: 3px outset #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.35rem;
+  color: #000;
+}
+
+.start-button {
+  font-weight: 900;
+  padding: 0 0.8rem;
+}
+
+.task-button {
+  padding: 0 0.7rem;
+  min-width: 110px;
+}
+
+.task-spacer { flex: 1; }
+.llc {
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.clock {
+  border: 2px inset #fff;
+  padding: 0.15rem 0.5rem;
+  min-width: 76px;
+  text-align: center;
+}
+
+.party-mode .desktop-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(255,63,183,0.32), transparent 18%),
+    radial-gradient(circle at 80% 15%, rgba(201,255,61,0.28), transparent 15%),
+    radial-gradient(circle at 70% 72%, rgba(0,132,255,0.3), transparent 20%);
+  animation: partyFlash 0.8s infinite steps(2, end);
+}
+
+@keyframes glitch {
+  0%, 100% { transform: skew(0deg); text-shadow: 4px 4px 0 #00eaff, -4px -4px 0 #ff3fb7; }
+  45% { transform: skew(-2deg); text-shadow: -5px 2px 0 #c9ff3d, 5px -2px 0 #ff3fb7; }
+  70% { transform: skew(2deg); }
+}
+
+@keyframes warpText {
+  0%, 100% { transform: perspective(600px) translateZ(0) rotateX(0deg); }
+  50% { transform: perspective(600px) translateZ(50px) rotateX(7deg); }
+}
+
+@keyframes timeTunnel { to { transform: rotate(360deg); } }
+@keyframes pulseStar { 50% { transform: scale(1.2) rotate(8deg); filter: drop-shadow(0 0 16px #fff36a); } }
+@keyframes lollipopSpin { to { transform: rotate(360deg); } }
+@keyframes shineIcon { 50% { filter: brightness(1.9) drop-shadow(0 0 14px var(--gold)); transform: scale(1.08); } }
+@keyframes swing { 0%, 100% { transform: rotate(-8deg); } 50% { transform: rotate(8deg); } }
+@keyframes partyFlash { 50% { opacity: 0.4; filter: hue-rotate(90deg); } }
+
+@media (max-width: 700px) {
+  body { overflow: hidden; }
+  .desktop-frame {
+    width: 100vw;
+    height: 100dvh;
+    aspect-ratio: auto;
+    border-radius: 0;
+  }
+  .wallpaper { object-position: center; }
+  .desktop-icon { width: 70px; }
+  .window-popup { left: 7% !important; top: 16% !important; width: 86vw; }
+  .task-button { min-width: auto; max-width: 118px; overflow: hidden; white-space: nowrap; }
+  .llc { display: none; }
+}
